@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Deploy To Kubernetes') {
             steps {
-                withKubeConfig([credentialsId: 'k8s-token', contextName: 'kubernetes-admin@kubernetes']) {
+                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-token', namespace: 'webapps', serverUrl: 'https://192.168.100.64:6443']])  {
                     sh "kubectl apply -f deployment-service.yml"
                 }
             }
@@ -12,7 +12,7 @@ pipeline {
         
         stage('Verify Deployment') {
             steps {
-                withKubeConfig([credentialsId: 'k8s-token', contextName: 'kubernetes-admin@kubernetes']) {
+                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-token', namespace: 'webapps', serverUrl: 'https://192.168.100.64:6443']])  {
                     sh "kubectl get svc -n webapps"
                 }
             }
